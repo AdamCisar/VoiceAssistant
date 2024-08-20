@@ -5,17 +5,6 @@ import shutil
 import sqlite3
 import subprocess
 
-def executeCommand(command, response, callback, activated):
-    if not activated:
-        return None
-
-    speak(response)
-
-    try:
-       return callback()
-    except Exception as e:
-        speak(f"An error occurred: {e}")
-
 def openChromeTab(pattern, title, url=None):
     if url is None:
         url = getLastVisitedUrl(pattern, title)
@@ -55,41 +44,9 @@ def getLastVisitedUrl(pattern, title):
 
         return url[0][0]
 
-
-def find_executable(name, search_path):
-    for root, dirs, files in os.walk(search_path):
-        if name in files:
-            return os.path.join(root, name)
-    return None
-
 def getPatternAndTitle(command, patternSymbol, splitWord):
     start_index = command.find(splitWord)
     end_index = start_index + len(splitWord)
     words = command[end_index:].strip()
 
     return words.replace(' ', patternSymbol), words
-
-def correctMisrecognitions(text):
-    correctionDict = {
-        "serge": {"correction": "search", "is_first_word": True},
-        "surge": {"correction": "search", "is_first_word": True},
-        "blade": {"correction": "play", "is_first_word": True},
-    }
-    
-    if text == '':
-        return text 
-    
-    words = text.split()
-    corrected_words = []
-    for index, word in enumerate(words):
-        isWordFirst = correctionDict.get(word, {}).get("is_first_word", False)
-        correctedWord = correctionDict.get(word, {}).get("correction", word)
-
-        if index == 0 and isWordFirst:
-            corrected_words.append(correctedWord)
-        elif not isWordFirst:
-            corrected_words.append(correctedWord)
-        else:
-            corrected_words.append(word)
-    
-    return ' '.join(corrected_words)

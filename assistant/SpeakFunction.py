@@ -1,6 +1,6 @@
 import pyttsx3
 
-engine = pyttsx3.init('sapi5')
+engine = pyttsx3.init()
 engine.setProperty('rate', 180)
 engine.setProperty('volume', 1.0)
 voices = engine.getProperty('voices')
